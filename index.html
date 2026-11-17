@@ -65,7 +65,7 @@ h1{font:400 clamp(44px,6.2vw,70px)/.85 var(--head);margin:0 0 14px}
 .vpause{margin-left:auto;width:44px;height:44px;display:flex;align-items:center;justify-content:center;background:rgba(0,0,0,.45);border:1.5px solid var(--white);border-radius:50%;padding:0;cursor:pointer}
 @media (max-width:700px){.vhero{min-height:560px}.vshade{background:linear-gradient(0deg,rgba(0,0,0,.82),rgba(0,0,0,.55))}}
 @media (prefers-reduced-motion:reduce){.rv,.fx{animation:none;opacity:1;transform:none}.vid,.vcontent{transition:none}}
-.pi{display:block;background:var(--soft);border-radius:10px}.pi svg{display:block;width:100%;height:auto}
+.pi{display:block;background:var(--soft);border-radius:10px}.pi svg{display:block;width:100%;height:auto}.pi img{display:block;width:100%;height:auto;border-radius:10px;mix-blend-mode:multiply}
 .thumbs{display:flex;gap:6px;margin-bottom:10px}.thumbs .pi{width:48px}.thumbs.big .pi{width:84px}
 .row .pi{width:56px;flex:none}
 .sub{font:400 36px/1 var(--head);margin:20px 0 10px}
@@ -269,6 +269,8 @@ aside.sum{position:sticky;top:calc(12px + env(safe-area-inset-top,0px));backgrou
 // ---- Edit these ----
 var CONTACT={whatsapp:"",email:""}; // used by the fallback when a request can’t be saved online
 var FORM_ENDPOINT=""; // e.g. https://formspree.io/f/yourid  (see README)
+// Product photos: product id -> image file in assets/. Products without a photo show a drawn illustration.
+var PHOTOS={rice:"assets/product-rice.jpg",dhal:"assets/product-dhal.jpg",oil:"assets/product-oil.jpg",eggs:"assets/product-eggs.jpg",banana:"assets/product-banana.jpg"};
 var LEAD_DAYS=3;
 // Indicative rates: LKR per 1 unit. Update before launch; these are not live.
 var RATES={LKR:1,USD:333,GBP:445,EUR:381,AUD:235,CAD:236,SGD:257,AED:90.7,INR:3.4};
@@ -383,7 +385,7 @@ potato:'<ellipse cx="34" cy="62" rx="22" ry="17" fill="#B88A55" transform="rotat
 banana:'<path d="M16 30c6 36 38 54 68 32-6 10-14 16-26 16C36 78 18 60 10 34z" fill="#F2C230"/><path d="M14 34c8 32 38 48 66 30" stroke="#C99A14" stroke-width="3" fill="none"/><rect x="10" y="22" width="9" height="14" rx="3" fill="#6B4E1B"/>',
 treat:'<rect x="22" y="40" width="52" height="16" rx="8" fill="#E8C48A"/><g fill="#E8C48A"><circle cx="24" cy="38" r="9"/><circle cx="24" cy="58" r="9"/><circle cx="72" cy="38" r="9"/><circle cx="72" cy="58" r="9"/></g>'};
 ART.dhal=ART.dhal;
-function pimg(id){return'<span class="pi"><svg viewBox="0 0 96 96" aria-hidden="true"><ellipse cx="48" cy="90" rx="30" ry="4" fill="#000" opacity=".12"/>'+(ART[id]||"")+"</svg></span>"}
+function pimg(id){if(PHOTOS[id])return'<span class="pi"><img src="'+PHOTOS[id]+'" alt="" width="640" height="640" loading="lazy"></span>';return'<span class="pi"><svg viewBox="0 0 96 96" aria-hidden="true"><ellipse cx="48" cy="90" rx="30" ry="4" fill="#000" opacity=".12"/>'+(ART[id]||"")+"</svg></span>"}
 function buildShop(){["Groceries","Pet food"].forEach(function(g,k){$(k?"shopP":"shopG").innerHTML=CAT.filter(function(c){return c.g===g}).map(function(c){return'<div class="sc">'+pimg(c.id)+"<b>"+esc(c.n)+"</b><small>"+esc(c.u)+'</small><small><span class="pp" data-p="'+c.p+'"></span></small><button class="btn sm" type="button" data-add="'+c.id+'">Add</button></div>'}).join("")});
 $("shop").addEventListener("click",function(e){var b=e.target.closest("[data-add]");if(!b)return;var id=b.dataset.add;setPlan("custom");var v=Math.min(20,(S.cart[id]||0)+1);S.cart[id]=v;$("q_"+id).textContent=v;update();b.textContent="Added · "+v;clearTimeout(b._t);b._t=setTimeout(function(){b.textContent="Add"},1800)})}
 function repSet(){var set={};if(S.freq==="custom")return set;var f=FREQ.filter(function(x){return x.id===S.freq})[0],b=fromIso(S.first),lim=addDays(today,400),i,d;for(i=0;i<80;i++){d=f.days?addDays(b,f.days*i):addMonths(b,i);if(d>lim)break;set[iso(d)]=1}return set}

@@ -1,0 +1,28 @@
+# macOS / Windows / Linux
+.DS_Store
+Thumbs.db
+desktop.ini
+*~
+
+# Editors
+.vscode/
+.idea/
+*.swp
+
+# Secrets and local config (never commit these)
+.env
+.env.*
+
+# Dependencies and build output (not used now, but safe if you add tooling later)
+node_modules/
+dist/
+.cache/
+
+# Logs
+*.log
+
+# Original, uncompressed videos and working files (keep the optimized ones in assets/)
+originals/
+source-videos/
+*.mov
+*.psd
